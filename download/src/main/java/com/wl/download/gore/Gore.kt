@@ -1,6 +1,7 @@
-package com.wl.download.request
+package com.wl.download.gore
 
 import android.content.Context
+import com.wl.download.request.DownloadLoader
 
 /**
  * User: wanglei
@@ -11,7 +12,7 @@ object Gore {
     private var downloadLoader: DownloadLoader? = null
 
     @JvmStatic
-    fun downloadLoader(context: Context):DownloadLoader = downloadLoader?:newDownLoader(context)
+    fun downloadLoader(context: Context): DownloadLoader = downloadLoader ?: newDownLoader(context)
 
     @Synchronized
     private fun newDownLoader(context: Context): DownloadLoader {

@@ -15,17 +15,23 @@ import java.io.File
  */
 class DownLoadRequest private constructor(
     val context: Context,
-    val data: Any
-){
+    val data: Any,
+    val defaults: DefaultRequestOptions
+) {
+
+    @JvmOverloads
+    fun newBuilder(context: Context = this.context) = Builder(this, context)
 
     class Builder {
 
         private val context: Context
+        private var defaults: DefaultRequestOptions
         private var data: Any?
 
 
         constructor(context: Context) {
             this.context = context
+            defaults = DefaultRequestOptions.INSTANCE
             data = null
 
         }
@@ -33,34 +39,25 @@ class DownLoadRequest private constructor(
         @JvmOverloads
         constructor(request: DownLoadRequest, context: Context = request.context) {
             this.context = context
+            defaults = request.defaults
             data = request.data
         }
 
-        /**
-         * Set the data to load.
-         *
-         * The default supported data types are:
-         * - [String] (mapped to a [Uri])
-         * - [Uri] ("android.resource", "content", "file", "http", and "https" schemes only)
-         * - [HttpUrl]
-         * - [File]
-         * - [DrawableRes]
-         * - [Drawable]
-         * - [Bitmap]
-         */
+
         fun data(data: Any?) = apply {
             this.data = data
         }
 
+        fun defaults(defaults: DefaultRequestOptions) = apply {
+            this.defaults = defaults
+        }
 
 
-        /**
-         * Create a new [ImageRequest].
-         */
         fun build(): DownLoadRequest {
             return DownLoadRequest(
                 context = context,
                 data = data ?: NullRequestData,
+                defaults = defaults,
             )
         }
 

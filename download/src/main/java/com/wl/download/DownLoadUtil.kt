@@ -5,7 +5,7 @@ import com.wl.download.model.DownloadInfo
 import com.wl.download.request.Disposable
 import com.wl.download.request.DownLoadRequest
 import com.wl.download.request.DownloadLoader
-import com.wl.download.request.Gore
+import com.wl.download.gore.Gore
 
 /**
  * User: wanglei
