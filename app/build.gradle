@@ -55,4 +55,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
     //lifecycle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
+
+
+    def work_version = "2.7.0"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 }
