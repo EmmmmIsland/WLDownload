@@ -4,9 +4,9 @@ import retrofit2.Retrofit
 import java.io.File
 
 
-typealias download_error = suspend (Throwable) -> Unit
-typealias download_process = suspend (downloadedSize: Long, length: Long, progress: Float) -> Unit
-typealias download_success = suspend (uri: File) -> Unit
+typealias downloadError = suspend (Throwable) -> Unit
+typealias downloadProcess = suspend (downloadedSize: Long, length: Long, progress: Float) -> Unit
+typealias downloadSuccess = suspend (uri: File) -> Unit
 
 
 object HttpKit {

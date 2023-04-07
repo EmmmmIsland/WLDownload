@@ -4,21 +4,29 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.work.WorkInfo.State.*
 import androidx.work.WorkManager
+import com.wl.download.retrofit.HttpDownload
 import com.wl.download.workmanager.DownloadWorker
 import com.wl.wldownload.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "WLOK_MainActivity"
-    val downloadUrl1 = "https://vfx.mtime.cn/Video/2019/03/21/mp4/190321153853126488.mp4"
-    val downloadUrl2 ="https://vfx.mtime.cn/Video/2019/03/19/mp4/190319222227698228.mp4"
+    val downloadUrl1 ="https://vfx.mtime.cn/Video/2019/03/19/mp4/190319222227698228.mp4"
+    val downloadUrl2 = "https://vfx.mtime.cn/Video/2019/03/21/mp4/190321153853126488.mp4"
     val downloadUrl3 ="https://dldir1.qq.com/wework/work_weixin/wxwork_android_3.0.31.13637_100001.apk"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,19 +35,31 @@ class MainActivity : AppCompatActivity() {
         checkPermission()
         mBinding.tvDown.setOnClickListener {
 //            CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-//                val downloadUrl = "https://vfx.mtime.cn/Video/2019/03/19/mp4/190319222227698228.mp4"
 //                HttpDownload.download(
-//                    downloadUrl,
+//                    downloadUrl1,
 //                    File(Environment.getExternalStorageDirectory(), "koko.mp4").toString(),
 //                    onError = { Log.d(TAG, "onerror") },
 //                    onProcess = { _, _, process ->
 //                        Log.d(TAG, "progress" + (process * 100).toInt())
-//                        mBinding.tvDown.setText("progress" + (process * 100).toInt())
+//                        mBinding.tvDown.text = "progress${(process * 100).toInt()}"
 //                    },
 //                    onSuccess = { Log.d(TAG, "onSuccess") })
 //            }
 
+            CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                HttpDownload.download(
+                    arrayOf(downloadUrl1,downloadUrl2),
+                    File(Environment.getExternalStorageDirectory(), "koko.mp4").toString(),
+                    onError = { Log.d(TAG, "onerror") },
+                    onProcess = { _, _, process ->
+                        Log.d(TAG, "progress" + (process * 100).toInt())
+                        mBinding.tvDown.text = "progress${(process * 100).toInt()}"
+                    },
+                    onSuccess = { Log.d(TAG, "onSuccess") })
+            }
+        }
 
+        mBinding.tvWork.setOnClickListener {
             val startDownload = DownloadWorker.startDownload(
                 this@MainActivity,
                 downloadUrl2,
@@ -47,7 +67,6 @@ class MainActivity : AppCompatActivity() {
                 "abc.mp4"
             )
             onWorkDownProcess(mBinding.tvDown, startDownload)
-
         }
 
     }
