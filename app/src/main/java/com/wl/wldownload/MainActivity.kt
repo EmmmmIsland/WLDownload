@@ -47,9 +47,8 @@ class MainActivity : AppCompatActivity() {
 //            }
 
             CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-                HttpDownload.download(
+                HttpDownload.instance.download(
                     arrayOf(downloadUrl1,downloadUrl2),
-                    File(Environment.getExternalStorageDirectory(), "koko.mp4").toString(),
                     onError = { Log.d(TAG, "onerror") },
                     onProcess = { _, _, process ->
                         Log.d(TAG, "progress" + (process * 100).toInt())

@@ -28,7 +28,7 @@ class DownloadWorker(context: Context, parameters: WorkerParameters) :
 
     private suspend fun download(downloadUrl: String, outputFile: String, fileName: String) :Boolean  {
         var isSuccess = false
-        HttpDownload.download(downloadUrl, "$outputFile/$fileName", onProcess = { _, _, process ->
+        HttpDownload.instance.download(downloadUrl, "$outputFile/$fileName", onProcess = { _, _, process ->
             setProgress(Data.Builder().let {
                 it.putInt("progress", (process * 100).toInt())
                 it.build()
