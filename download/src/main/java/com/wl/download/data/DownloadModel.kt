@@ -8,5 +8,7 @@ package com.wl.download.data
 data class DownloadModel(
     val url: String,
     val length: Long,
-    val finished: Boolean
+    val finished: Boolean,
+    val isStop: Boolean
 )
+

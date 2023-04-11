@@ -29,4 +29,45 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/tv_down"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_s_single_download"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:background="@color/purple_200"
+        android:gravity="center"
+        android:minHeight="60dp"
+        android:text="单图-下载图片"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_s_single_pause"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:background="@color/purple_500"
+        android:gravity="center"
+        android:minHeight="60dp"
+        android:text="单图-下载图片暂停"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@id/tv_down"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tv_s_single_con"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:background="@color/purple_200"
+        android:gravity="center"
+        android:minHeight="60dp"
+        android:text="单图继续下载-下载图片"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@id/tv_s_single_pause"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

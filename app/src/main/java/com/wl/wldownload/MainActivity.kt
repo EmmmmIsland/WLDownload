@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.work.WorkInfo.State.*
 import androidx.work.WorkManager
 import com.wl.download.retrofit.HttpDownload
@@ -66,6 +67,28 @@ class MainActivity : AppCompatActivity() {
                 "abc.mp4"
             )
             onWorkDownProcess(mBinding.tvDown, startDownload)
+        }
+
+
+        mBinding.tvSSingleDownload.setOnClickListener {
+            lifecycleScope.launch {
+                HttpDownload.instance.download(
+                    downloadUrl1, this@MainActivity.cacheDir.path + "/cccc.mp4"
+                )
+            }
+        }
+
+        mBinding.tvSSinglePause.setOnClickListener {
+            HttpDownload.instance.pauseDownload()
+        }
+
+        mBinding.tvSSingleCon.setOnClickListener{
+            lifecycleScope.launch {
+                HttpDownload.instance.downloadCon(
+                    downloadUrl1,
+                    this@MainActivity.cacheDir.path + "/cccc.mp4"
+                )
+            }
         }
 
     }
