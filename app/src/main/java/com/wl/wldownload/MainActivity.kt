@@ -7,12 +7,16 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.work.WorkInfo.State.*
 import androidx.work.WorkManager
+import com.wl.download.DownloadManager
+import com.wl.download.DownloadTask
+import com.wl.download.UrlException
 import com.wl.download.retrofit.HttpDownload
 import com.wl.download.workmanager.DownloadWorker
 import com.wl.wldownload.databinding.ActivityMainBinding
@@ -26,9 +30,13 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "WLOK_MainActivity"
-    val downloadUrl1 ="https://vfx.mtime.cn/Video/2019/03/19/mp4/190319222227698228.mp4"
+    val downloadUrl1 = "https://vfx.mtime.cn/Video/2019/03/19/mp4/190319222227698228.mp4"
     val downloadUrl2 = "https://vfx.mtime.cn/Video/2019/03/21/mp4/190321153853126488.mp4"
-    val downloadUrl3 ="https://dldir1.qq.com/wework/work_weixin/wxwork_android_3.0.31.13637_100001.apk"
+    val downloadUrl3 =
+        "https://dldir1.qq.com/wework/work_weixin/wxwork_android_3.0.31.13637_100001.apk"
+    private lateinit var downloadTask: DownloadTask
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
             CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
                 HttpDownload.instance.download(
-                    arrayOf(downloadUrl1,downloadUrl2),
+                    arrayOf(downloadUrl1, downloadUrl2),
                     onError = { Log.d(TAG, "onerror") },
                     onProcess = { _, _, process ->
                         Log.d(TAG, "progress" + (process * 100).toInt())
@@ -82,7 +90,7 @@ class MainActivity : AppCompatActivity() {
             HttpDownload.instance.pauseDownload()
         }
 
-        mBinding.tvSSingleCon.setOnClickListener{
+        mBinding.tvSSingleCon.setOnClickListener {
             lifecycleScope.launch {
                 HttpDownload.instance.downloadCon(
                     downloadUrl1,
@@ -91,7 +99,54 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        mBinding.tvNewDownload.setOnClickListener {
+//            lifecycleScope.launch {
+//                downloadTask = DownloadTask()
+//                downloadTask.download(
+//                    downloadUrl1,
+//                    this@MainActivity.cacheDir.path + "/dddd.mp4"
+//                )
+//            }
+//            DownloadManager.instance.startDownload(downloadUrl1)
+//            DownloadManager.instance.startDownload(downloadUrl2)
+            try {
+//                DownloadManager.instance.startDownload("23213")
+                DownloadManager.instance.startDownload(
+                    url = downloadUrl1,
+                    fileName = "aaa11.mp4",
+                    onError = {it-> Log.d(TAG, "onerror${it}") },
+                    onProcess = { _, _, process -> Log.d(TAG, process.toString()) },
+                    onSuccess = { Log.d(TAG, "onSuccess") })
+
+                DownloadManager.instance.startDownload(
+                    url = downloadUrl2,
+                    fileName = "aaa22.mp4",
+                    onError = {it-> Log.d(TAG, "onerror${it}") },
+                    onProcess = { _, _, process -> Log.d(TAG, process.toString()) },
+                    onSuccess = { Log.d(TAG, "onSuccess") })
+
+            } catch (e: UrlException) {
+                Toast.makeText(this, "url 格式异常", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        mBinding.tvSNewPause1.setOnClickListener {
+            DownloadManager.instance.pauseDownload(downloadUrl1)
+        }
+
+        mBinding.tvSNewPause2.setOnClickListener {
+            DownloadManager.instance.pauseDownload(downloadUrl2)
+        }
+
+        mBinding.tvNewCon1.setOnClickListener {
+            DownloadManager.instance.restart(downloadUrl1)
+        }
+
+        mBinding.tvNewCon2.setOnClickListener {
+            DownloadManager.instance.restart(downloadUrl2)
+        }
     }
+
     private fun onWorkDownProcess(tv_msg: TextView, startDownload: UUID) {
         tv_msg.text = ""
         WorkManager.getInstance(applicationContext)
